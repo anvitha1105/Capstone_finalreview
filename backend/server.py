@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, status, File, UploadFile
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -675,11 +675,14 @@ async def submit_audio_recognition_answer(
 
 @api_router.post("/content-authentication/analyze-image")
 async def analyze_uploaded_image(
-    file: bytes,
+    file: UploadFile = File(...),
     current_user: User = Depends(get_current_user)
 ):
+    # Read the file content
+    file_content = await file.read()
+    
     # Analyze the uploaded image for authenticity
-    analysis_result = analyze_image_authenticity(file)
+    analysis_result = analyze_image_authenticity(file_content)
     
     return {
         "analysis": analysis_result,
