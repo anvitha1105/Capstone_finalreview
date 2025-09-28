@@ -1,0 +1,29 @@
+Please help me add the following new features to my existing web application. This will require both front-end and back-end changes.
+
+1. Human vs. AI Interactive Games
+I need to implement three new games that allow users to compete against or compare their skills with an AI.
+
+Logical Reasoning Game:
+
+Front-End: Create an interface to display a series of logic puzzles (e.g., number sequences, shape patterns). It should have input fields for users to submit their answers.
+
+Back-End: Develop a system to generate these puzzles and a logic to evaluate the user's answer. The back-end also needs to "solve" the same puzzles using a simple AI algorithm and then provide a comparison of the human vs. AI performance.
+
+Creative Writing Game:
+
+Front-End: Build a text editor where users can write a short story or poem based on a given prompt.
+
+Back-End: When the user submits their writing, the back-end should use a language model (e.g., a simple API call to a service like Google's Gemini, or a locally hosted one) to generate its own version based on the same prompt. The back-end must then send both the user's and the AI's version back to the front-end.
+
+Audio Recognition Game:
+
+Front-End: Design a UI with a simple audio player and two buttons: "Human-made" and "AI-generated."
+
+Back-End: The back-end needs to serve short audio clips that are either genuine human recordings or AI-synthesized audio. It must then validate the user's choice and send back the correct answer.
+
+2. Content Authentication Feature
+This is a critical new feature. We need to add a tool that detects if an image is real or fake.
+
+Front-End: Create an interface with a clear image upload button. After the image is uploaded and processed, the UI must display a result like "Authentic Image" or "AI-Generated Image" with high accuracy.
+
+Back-End: This feature requires a robust image detection model. The back-end must be able to accept an uploaded image, run it through this model, and return a result. I understand that a pre-trained model may be sufficient, but please prepare to train a custom model if needed to ensure high accuracy.
