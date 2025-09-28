@@ -48,17 +48,17 @@ const ContentAuthentication = () => {
     try {
       setUploadState('uploading');
       
-      // Convert file to bytes for API
-      const fileBuffer = await selectedFile.arrayBuffer();
-      const fileBytes = new Uint8Array(fileBuffer);
+      // Create FormData to properly send the image
+      const formData = new FormData();
+      formData.append('file', selectedFile);
 
       setUploadState('analyzing');
       
       const response = await axios.post(`${API}/content-authentication/analyze-image`, 
-        fileBytes,
+        formData,
         {
           headers: {
-            'Content-Type': 'application/octet-stream'
+            'Content-Type': 'multipart/form-data'
           }
         }
       );

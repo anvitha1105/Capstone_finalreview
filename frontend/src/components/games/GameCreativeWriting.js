@@ -46,16 +46,36 @@ const GameCreativeWriting = () => {
       setGameState('submitted');
       const timeUsed = 300 - timeLeft;
 
+      // Log the data being sent to help with debugging
+      console.log('Submitting creative writing:', {
+        prompt_id: prompt.id,
+        user_writing: userWriting.substring(0, 20) + '...', // Log just the beginning for brevity
+        time_taken: timeUsed
+      });
+
       const response = await axios.post(`${API}/games/creative-writing/submit`, {
         prompt_id: prompt.id,
         user_writing: userWriting,
         time_taken: timeUsed
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
 
+      console.log('Response received:', response.data);
       setResults(response.data);
       setGameState('results');
     } catch (error) {
       console.error('Error submitting writing:', error);
+      // Provide more detailed error information
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+      }
+      alert('Error submitting your writing. Please try again.');
+      // Reset to writing state to allow resubmission
+      setGameState('writing');
     }
   };
 
@@ -97,7 +117,7 @@ const GameCreativeWriting = () => {
             {/* Prompt */}
             <div className="mb-6 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-l-4 border-purple-500">
               <h2 className="text-lg font-semibold text-gray-800 mb-2">Writing Prompt</h2>
-              <p className="text-gray-700 text-lg italic">{prompt?.prompt}</p>
+              <p className="text-gray-900 font-medium text-lg italic">{prompt?.prompt}</p>
             </div>
 
             {/* Stats Bar */}

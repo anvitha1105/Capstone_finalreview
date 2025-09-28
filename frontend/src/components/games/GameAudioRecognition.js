@@ -33,20 +33,34 @@ const GameAudioRecognition = () => {
     const currentClip = audioClips[currentClipIndex];
     if (currentClip) {
       setIsPlaying(true);
+      // Create audio element and set properties
       const audio = new Audio(currentClip.url);
-      audio.play().catch(err => {
-        console.error('Error playing audio:', err);
-        setIsPlaying(false);
-      });
       
+      // Add event listeners before attempting to play
       audio.onended = () => {
+        console.log('Audio playback ended');
         setIsPlaying(false);
       };
       
-      audio.onerror = () => {
+      audio.onerror = (e) => {
+        console.error('Audio failed to load:', e);
         setIsPlaying(false);
-        console.error('Audio failed to load');
+        alert('Error playing audio. Please try again.');
       };
+      
+      // Preload the audio
+      audio.preload = 'auto';
+      
+      // Play the audio with proper error handling
+      audio.play()
+        .then(() => {
+          console.log('Audio playing successfully');
+        })
+        .catch(err => {
+          console.error('Error playing audio:', err);
+          setIsPlaying(false);
+          alert('Error playing audio. Please check your browser settings and try again.');
+        });
     }
   };
 
@@ -58,16 +72,36 @@ const GameAudioRecognition = () => {
       const currentClip = audioClips[currentClipIndex];
       const timeUsed = Math.round((Date.now() - gameStartTime) / 1000);
 
-      const response = await axios.post(`${API}/games/audio-recognition/submit`, {
+      // Log the data being sent to help with debugging
+      console.log('Submitting answer:', {
         audio_id: currentClip.id,
         user_answer: answer,
         time_taken: timeUsed
       });
 
+      const response = await axios.post(`${API}/games/audio-recognition/submit`, {
+        audio_id: currentClip.id,
+        user_answer: answer,
+        time_taken: timeUsed
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('Response received:', response.data);
       setResults(response.data);
       setGameState('results');
     } catch (error) {
       console.error('Error submitting answer:', error);
+      // Provide more detailed error information
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+      }
+      alert('Error submitting your answer. Please try again.');
+      // Reset to playing state to allow resubmission
+      setGameState('playing');
     }
   };
 

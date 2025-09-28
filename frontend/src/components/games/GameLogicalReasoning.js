@@ -49,16 +49,36 @@ const GameLogicalReasoning = () => {
         ? selectedOption 
         : userAnswer;
 
-      const response = await axios.post(`${API}/games/logical-reasoning/submit`, {
+      // Log the data being sent to help with debugging
+      console.log('Submitting logical reasoning answer:', {
         puzzle_id: puzzle.id,
         user_answer: answer,
         time_taken: startTime
       });
 
+      const response = await axios.post(`${API}/games/logical-reasoning/submit`, {
+        puzzle_id: puzzle.id,
+        user_answer: answer,
+        time_taken: startTime
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('Response received:', response.data);
       setResults(response.data);
       setGameState('results');
     } catch (error) {
       console.error('Error submitting answer:', error);
+      // Provide more detailed error information
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+      }
+      alert('Error submitting your answer. Please try again.');
+      // Reset to playing state to allow resubmission
+      setGameState('playing');
     }
   };
 
@@ -75,7 +95,7 @@ const GameLogicalReasoning = () => {
       case 'number_sequence':
         return (
           <div className="space-y-4">
-            <p className="text-lg font-medium">{puzzle.question}</p>
+            <p className="text-lg font-medium text-gray-800">{puzzle.question}</p>
             <input
               type="number"
               value={userAnswer}
@@ -90,8 +110,8 @@ const GameLogicalReasoning = () => {
       case 'pattern_matching':
         return (
           <div className="space-y-4">
-            <p className="text-lg font-medium">{puzzle.question}</p>
-            <div className="text-2xl font-mono tracking-wider text-center p-4 bg-gray-100 rounded-lg">
+            <p className="text-lg font-medium text-gray-800">{puzzle.question}</p>
+            <div className="text-2xl font-mono tracking-wider text-center p-4 bg-gray-100 rounded-lg text-gray-800">
               {puzzle.pattern}
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -101,8 +121,8 @@ const GameLogicalReasoning = () => {
                   onClick={() => setSelectedOption(option)}
                   className={`p-3 rounded-lg border-2 text-lg font-medium transition-colors ${
                     selectedOption === option
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-300 hover:border-gray-400'
+                      ? 'border-blue-500 bg-blue-50 text-gray-800'
+                      : 'border-gray-300 hover:border-gray-400 text-gray-800'
                   }`}
                   disabled={gameState !== 'playing'}
                 >
@@ -116,7 +136,7 @@ const GameLogicalReasoning = () => {
       case 'logic_grid':
         return (
           <div className="space-y-4">
-            <p className="text-lg font-medium">{puzzle.question}</p>
+            <p className="text-lg font-medium text-gray-800">{puzzle.question}</p>
             <div className="space-y-2">
               {puzzle.options.map((option, index) => (
                 <button
@@ -124,8 +144,8 @@ const GameLogicalReasoning = () => {
                   onClick={() => setSelectedOption(option)}
                   className={`w-full p-3 text-left rounded-lg border-2 transition-colors ${
                     selectedOption === option
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-300 hover:border-gray-400'
+                      ? 'border-blue-500 bg-blue-50 text-gray-800'
+                      : 'border-gray-300 hover:border-gray-400 text-gray-800'
                   }`}
                   disabled={gameState !== 'playing'}
                 >
@@ -137,7 +157,7 @@ const GameLogicalReasoning = () => {
         );
 
       default:
-        return <p>Unknown puzzle type</p>;
+        return <p className="text-gray-800">Unknown puzzle type</p>;
     }
   };
 
