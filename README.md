@@ -5,7 +5,7 @@ A full-stack web application that allows users to test their cognitive abilities
 
 ## Overview
 
-CognitiveArena is an interactive platform where humans can compete against AI in various cognitive tasks. The platform features multiple games designed to test different cognitive abilities including pattern recognition, text analysis, and memory recall. Users can track their performance, compare scores with AI baselines, and climb the global leaderboard.
+CognitiveArena is an interactive platform where humans can compete against AI in various cognitive tasks. The platform features multiple games designed to test different cognitive abilities including pattern recognition, text analysis, and memory recall. Users can track their performance, compare scores with AI baselines, and climb the global leaderboard.It also has the feauture of authnetication where the user uploads an image and the model classifies it as AI  or Real.
 
 ## Features
 
